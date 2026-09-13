@@ -1,0 +1,19 @@
+{
+  "root": "C:\\path\\to\\your-flop-stack",
+  "repositories": [
+    "flop-session-router",
+    "flop-conformance-lab"
+  ],
+  "tasks": [],
+  "network": {
+    "technocore": "https://technocore.chat",
+    "github": "https://api.github.com"
+  },
+  "github": {
+    "yellow-paper": "https://api.github.com/repos/flop-labs/yellowpaper",
+    "technocore": "https://api.github.com/repos/flop-labs/technocore-chat"
+  },
+  "logs": {
+    "roots": []
+  }
+}

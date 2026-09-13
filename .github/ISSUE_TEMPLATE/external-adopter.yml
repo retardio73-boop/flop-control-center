@@ -1,0 +1,28 @@
+name: External adopter report
+description: Report an independent FLOP Control Center installation or integration
+title: "[adopter] "
+labels: [adoption]
+body:
+  - type: input
+    id: repo
+    attributes: {label: Repository or project, placeholder: https://github.com/owner/repo}
+    validations: {required: true}
+  - type: input
+    id: platform
+    attributes: {label: Platform, placeholder: Windows 11 / Ubuntu 24.04 / macOS}
+    validations: {required: true}
+  - type: dropdown
+    id: mode
+    attributes: {label: Mode, options: [Demo, Public-safe local, Embedded/integrated]}
+    validations: {required: true}
+  - type: textarea
+    id: result
+    attributes: {label: Result and evidence, description: Include commit/release, commands used, and bounded evidence. Do not post secrets or private configuration.}
+    validations: {required: true}
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: No secrets, private keys, passphrases, private config, or custody material are included.
+          required: true

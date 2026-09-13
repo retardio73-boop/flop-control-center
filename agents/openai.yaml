@@ -1,0 +1,4 @@
+interface:
+  display_name: "FLOP Control Center"
+  short_description: "Inspect FLOP stack health and reversible operations"
+  brand_color: "#161A20"

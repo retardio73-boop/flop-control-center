@@ -1,0 +1,20 @@
+# FLOP Control Center
+
+Public-safe local operator dashboard for FLOP-oriented development stacks.
+
+## Start
+- Demo: `python server_public.py --demo`
+- Real use: copy `config/config.example.json` to `config/config.local.json`, configure explicit allowlists, run `python server_public.py`.
+
+## Read
+- `GET /api/status`: repository health, network/GitHub summaries, bounded logs, task state, jobs, alerts.
+
+## Reversible actions
+- `POST /api/check`
+- `POST /api/open`
+- `POST /api/task` (`start` or `stop`)
+
+## Safety
+No signer custody, key export, settlement, protocol publication, autonomous response policy, roster consent, or irreversible protocol actions. Demo mode is read-only.
+
+See `AGENTS.md`, `SKILL.md`, `docs/MODULE_CONTRACT.md`, and `docs/PUBLICATION_BOUNDARY.md`.

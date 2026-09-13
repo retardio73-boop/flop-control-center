@@ -1,4 +1,4 @@
-import json, os
+import json, os, sys
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import urlparse
@@ -6,11 +6,13 @@ from urllib.parse import urlparse
 from adapters.filesystem import open_repo
 from adapters.tasks import control as task_control
 from core.config import load_config, root_path
+from core.demo import snapshot as demo_snapshot
 from core.jobs import start as start_job
 from core.public_snapshot import build
 
 HERE = Path(__file__).resolve().parent
-CFG = load_config()
+DEMO = '--demo' in sys.argv
+CFG = None if DEMO else load_config()
 UI = HERE / 'ui' / 'public'
 
 
@@ -28,10 +30,12 @@ class Handler(SimpleHTTPRequestHandler):
         self.wfile.write(raw)
     def do_GET(self):
         if self.path.startswith('/api/status'):
-            return self.send_json(build(CFG))
+            return self.send_json(demo_snapshot() if DEMO else build(CFG))
         return super().do_GET()
 
     def do_POST(self):
+        if DEMO:
+            return self.send_json({'ok': False, 'error': 'DEMO_READ_ONLY'}, 403)
         size = int(self.headers.get('Content-Length', '0'))
         try:
             body = json.loads(self.rfile.read(size) or b'{}')
@@ -61,5 +65,6 @@ class Handler(SimpleHTTPRequestHandler):
 if __name__ == '__main__':
     os.chdir(HERE)
     port = int(os.environ.get('FLOP_CONTROL_CENTER_PORT', '8765'))
-    print(f'FLOP Control Center (public-safe): http://127.0.0.1:{port}')
+    mode = 'demo/read-only' if DEMO else 'public-safe'
+    print(f'FLOP Control Center ({mode}): http://127.0.0.1:{port}')
     ThreadingHTTPServer(('127.0.0.1', port), Handler).serve_forever()

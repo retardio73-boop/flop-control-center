@@ -1,46 +1,49 @@
 # FLOP Control Center
 
-A small local operator dashboard for FLOP-oriented development stacks.
+See your FLOP-oriented development stack in one place.
 
-It gives builders one place to inspect repository state, GitHub/upstream targets, network health, recent logs, background checks, and explicitly allowlisted local controls.
+- repository health and branch/head/dirty state
+- background checks and bounded job output
+- GitHub/upstream and network health
+- recent bounded logs
+- reversible allowlisted local controls
+- no signing, custody, settlement, or protocol publication
 
-## Why
+## Try it in 30 seconds
 
-Multi-repository agent stacks become hard to operate before they become hard to build. Control Center keeps operational evidence visible without becoming a signing or protocol-execution surface.
+```bash
+python server_public.py --demo
+```
 
-## Public-safe surface
+Open `http://127.0.0.1:8765/`. Demo mode uses synthetic data, loads no local config, and rejects every POST action with `DEMO_READ_ONLY`.
 
-- repository branch/head/dirty/ahead-behind state
-- background repository checks
-- GitHub target summaries
-- network reachability and latency
-- recent bounded log tails
-- allowlisted folder opening
-- allowlisted task start/stop on Windows
-- health score and operator alerts
+![Demo dashboard](docs/assets/demo.png)
 
-Signing, key export, protocol publication and other irreversible protocol actions are intentionally out of scope.
-
-## Run locally
+## Use it on a local stack
 
 1. Copy `config/config.example.json` to `config/config.local.json`.
-2. Set your stack root, repositories and optional targets.
-3. Run `python server_public.py`.
-4. Open `http://127.0.0.1:8765/`.
+2. Or start from `config/presets/flop-stack.example.json` for a FLOP-oriented stack.
+3. Set only your own stack root, repositories, optional targets, logs, and task allowlists.
+4. Run `python server_public.py`.
+5. Open `http://127.0.0.1:8765/`.
 
-Python 3.11+ is recommended. No third-party Python package is required for the public-safe core.
+Python 3.11+ is recommended; the public-safe core has no third-party Python dependency.
 
-## Configuration
+## For agents
 
-`config.local.json` stays local and should contain machine-specific paths and allowlists. Empty task, GitHub, network and log sections are valid.
+Start with [`AGENTS.md`](AGENTS.md), [`SKILL.md`](SKILL.md), and [`llms.txt`](llms.txt). The primary observational endpoint is `GET /api/status`. Reversible actions are allowlisted and intentionally narrow.
+
+## Adoption
+
+External use is tracked in [`ADOPTERS.md`](ADOPTERS.md), separately from stars/forks/self-tests. If you run this independently, submit the **External adopter report** issue template with reproducible bounded evidence and no secrets.
 
 ## Safety model
 
-The public surface is deny-by-default. Repository and task actions require explicit allowlisting. Unsupported task control outside Windows fails closed. Unknown evidence is not promoted to verified state.
+The public surface is deny-by-default. Unknown or unsupported evidence stays unknown/unsupported. Signing, key export, identity custody, protocol publication, autonomous replies, roster consent, settlement, and other irreversible protocol actions are out of scope.
 
 ## Maturity
 
-Alpha. The current focus is local operational visibility and reversible controls, not remote administration or protocol custody.
+Alpha. The focus is local operational visibility and reversible controls, not remote administration or protocol custody.
 
 ## License
 

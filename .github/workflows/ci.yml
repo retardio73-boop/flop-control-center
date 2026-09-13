@@ -6,10 +6,11 @@ on:
 
 jobs:
   smoke:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest]
         python-version: ['3.11', '3.12']
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -17,7 +18,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Compile
         run: python -m compileall -q .
+      - name: Demo server smoke
+        run: python tools/smoke_demo.py
       - name: Public snapshot smoke
-        run: |
-          cp config/config.example.json config/config.local.json
-          python -c "from core.config import load_config; from core.public_snapshot import build; d=build(load_config()); assert d['mode']=='public-safe'; print(d['health_score'])"
+        run: >-
+          python -c "import shutil; shutil.copyfile('config/config.example.json','config/config.local.json'); from core.config import load_config; from core.public_snapshot import build; d=build(load_config()); assert d['mode']=='public-safe'; print(d['health_score'])"
