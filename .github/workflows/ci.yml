@@ -1,0 +1,23 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile
+        run: python -m compileall -q .
+      - name: Public snapshot smoke
+        run: |
+          cp config/config.example.json config/config.local.json
+          python -c "from core.config import load_config; from core.public_snapshot import build; d=build(load_config()); assert d['mode']=='public-safe'; print(d['health_score'])"

@@ -1,0 +1,16 @@
+{
+  "root": "C:\\path\\to\\your-stack",
+  "repositories": [
+    "example-repository"
+  ],
+  "tasks": [],
+  "network": {
+    "github": "https://api.github.com"
+  },
+  "github": {
+    "example": "https://api.github.com/repos/OWNER/REPOSITORY"
+  },
+  "logs": {
+    "roots": []
+  }
+}
