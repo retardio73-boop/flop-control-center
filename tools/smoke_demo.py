@@ -15,6 +15,12 @@ try:
         except Exception:
             time.sleep(0.2)
     assert data and data.get('mode') == 'demo' and data.get('demo') is True
+    boundary = data.get('trust_boundaries', {}).get('tclk_issue_96', {})
+    policy = boundary.get('policy', {})
+    assert boundary.get('classification') == 'OFFICIAL_BUT_TBD'
+    assert policy.get('status') == 'UNTRUSTED_VENUE_TIME'
+    assert policy.get('fail_closed') is True
+    assert policy.get('allow_settlement_claim') is False
     request = urllib.request.Request(f'http://127.0.0.1:{PORT}/api/check', data=b'{}', method='POST', headers={'Content-Type':'application/json'})
     try:
         urllib.request.urlopen(request, timeout=2)
