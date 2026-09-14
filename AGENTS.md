@@ -15,3 +15,9 @@ Reversible write endpoints:
 `--demo` disables all POST actions and returns `DEMO_READ_ONLY`.
 
 Do not use this project for signing, custody, settlement, protocol publication, autonomous replies, roster consent, or other irreversible actions. Treat dashboard health as operational evidence only, not protocol conformance or settlement proof.
+
+Adjacent public tools:
+- Conformance evidence: https://github.com/retardio73-boop/flop-conformance-lab
+- Deterministic routing: https://github.com/retardio73-boop/flop-session-router
+
+Keep these boundaries separate: operational health is not conformance, and conformance is not settlement.
