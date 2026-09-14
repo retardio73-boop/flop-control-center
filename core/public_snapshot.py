@@ -6,6 +6,7 @@ from modules.network import collect as network_collect
 from modules.logs import collect as logs_collect
 from core.config import root_path
 from core.jobs import snapshot as jobs_snapshot
+from core.trust_boundaries import public_trust_boundaries
 
 
 def build(cfg):
@@ -50,6 +51,7 @@ def build(cfg):
         'network': data['network'],
         'logs': data['logs'],
         'jobs': jobs_snapshot(),
+        'trust_boundaries': public_trust_boundaries(),
         'alerts': alerts,
         'health_score': max(0, 100 - 20 * bad - 7 * warn),
     }
