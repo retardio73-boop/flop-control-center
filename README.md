@@ -45,6 +45,13 @@ The public surface is deny-by-default. Unknown or unsupported evidence stays unk
 
 Alpha. The focus is local operational visibility and reversible controls, not remote administration or protocol custody.
 
+## Works with
+
+- [FLOP Conformance Lab](https://github.com/retardio73-boop/flop-conformance-lab) — profile-scoped interoperability evidence. Dashboard health must never be treated as conformance.
+- [FLOP Session Router](https://github.com/retardio73-boop/flop-session-router) — deterministic routing, preflight, failover and auditable decisions.
+
+Control Center is the operator surface; Conformance Lab is the evidence surface; Session Router is the routing surface.
+
 ## License
 
 Apache-2.0.
