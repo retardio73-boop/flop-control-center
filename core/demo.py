@@ -1,3 +1,6 @@
+from core.trust_boundaries import public_trust_boundaries
+
+
 def snapshot():
     return {
         'product': 'FLOP Control Center',
@@ -14,5 +17,6 @@ def snapshot():
         'github': {'yellow-paper': {'ok':True,'name':'FLOP Yellow Paper','state':'open','comments':12,'ms':52}},
         'logs': [{'path':'runtime/agent.log','tail':'INFO observer active\nINFO cursor restored\nINFO no pending work'}],
         'jobs': {'flop-conformance-lab-demo': {'repo':'flop-conformance-lab','state':'passed','code':0,'output':'19 checks passed'}},
+        'trust_boundaries': public_trust_boundaries(),
         'demo': True,
     }
