@@ -7,6 +7,7 @@ from modules.logs import collect as logs_collect
 from core.config import root_path
 from core.jobs import snapshot as jobs_snapshot
 from core.trust_boundaries import public_trust_boundaries
+from core.operator_cockpit import build_operator_cockpit
 
 
 def build(cfg):
@@ -40,6 +41,7 @@ def build(cfg):
         if not state.get('ok'):
             alerts.append({'level': 'warn', 'text': f'{name} connectivity failed'})
 
+    trust = public_trust_boundaries()
     bad = sum(1 for item in alerts if item['level'] == 'bad')
     warn = sum(1 for item in alerts if item['level'] == 'warn')
     return {
@@ -51,7 +53,8 @@ def build(cfg):
         'network': data['network'],
         'logs': data['logs'],
         'jobs': jobs_snapshot(),
-        'trust_boundaries': public_trust_boundaries(),
+        'trust_boundaries': trust,
+        'evidence_cockpit': build_operator_cockpit(data, trust),
         'alerts': alerts,
         'health_score': max(0, 100 - 20 * bad - 7 * warn),
     }
