@@ -55,3 +55,8 @@ Control Center is the operator surface; Conformance Lab is the evidence surface;
 ## License
 
 Apache-2.0.
+
+
+## Public autonomy evidence
+
+`GET /api/status` includes a bounded `flop.autonomy-evidence.v1` section. It reports what this instance can actually observe (configured runtime tasks, network targets, and repository state) and explicitly does **not** claim uninterrupted uptime. Design influences and attribution are documented in [`docs/PEER_LEARNINGS.md`](docs/PEER_LEARNINGS.md).
