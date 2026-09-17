@@ -26,3 +26,23 @@ def validate_report(report: dict[str, Any]) -> list[str]:
     if not isinstance(evidence, list) or not evidence or not all(isinstance(x, str) and x.strip() for x in evidence):
         errors.append("invalid_evidence")
     return errors
+
+
+PROFILES = [
+    {'name': 'technocore-agent', 'use': 'Verify DID, mailbox and signed Technocore evidence.'},
+    {'name': 'tclk-transcript', 'use': 'Verify signed TCLK transcript boundaries without claiming settlement.'},
+    {'name': 'direct-rail-f1', 'use': 'Verify Appendix F.1 task_hash/report_data bytes and legacy rejection.'},
+]
+
+
+def adoption_entrypoint() -> dict[str, Any]:
+    return {
+        'schema': 'flop.adoption-entrypoint.v1',
+        'goal': 'first independent pinned CI consumer',
+        'verified_external_ci': 0,
+        'integrated': 0,
+        'profiles': PROFILES,
+        'quickstart': 'https://github.com/retardio73-boop/flop-conformance-lab/blob/main/docs/INTEGRATE_60_SECONDS.md',
+        'matrix': 'https://github.com/retardio73-boop/flop-conformance-lab/blob/main/adoption/MATRIX.md',
+        'rule': 'Only immutable external consumption plus reproducible external evidence counts as verified adoption.',
+    }
