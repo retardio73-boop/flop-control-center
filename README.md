@@ -37,7 +37,7 @@ Start with [`AGENTS.md`](AGENTS.md), [`SKILL.md`](SKILL.md), and [`llms.txt`](ll
 
 External use is tracked in [`ADOPTERS.md`](ADOPTERS.md), separately from stars/forks/self-tests. The versioned public contract is in [`docs/INTEGRATION_CONTRACT.md`](docs/INTEGRATION_CONTRACT.md), with a minimal consumer in [`examples/consume_public_api.py`](examples/consume_public_api.py) and a machine-readable adopter schema in [`schemas/flop-adopter-report-v1.schema.json`](schemas/flop-adopter-report-v1.schema.json).
 
-If you run this independently, submit the **External adopter report** issue template with reproducible bounded evidence and no secrets. Maintainer runs remain `SELF_TEST`; they are never counted as external adoption.
+If you run this independently, submit the **External adopter report** issue template with reproducible bounded evidence and no secrets. Maintainer runs remain `SELF_TEST`; they are never counted as external adoption. Public upstream discussions that produced concrete regressions or fixtures are tracked separately in [`docs/UPSTREAM_EVIDENCE_LINKS.md`](docs/UPSTREAM_EVIDENCE_LINKS.md).
 
 ## Safety model
 
