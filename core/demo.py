@@ -2,6 +2,7 @@ from core.trust_boundaries import public_trust_boundaries
 from core.continuity import build_continuity_evidence, peer_acknowledgements
 from core.evidence_api import make_record
 from core.evidence_registry import build_registry
+from core.adoption import adoption_entrypoint
 
 
 def snapshot():
@@ -10,6 +11,7 @@ def snapshot():
         'mode': 'demo',
         'health_score': 93,
         'alerts': [{'level': 'warn', 'text': 'router-fixture has uncommitted changes'}],
+        'adoption': adoption_entrypoint(),
         'repos': [
             {'name':'flop-session-router','git':True,'branch':'main','head':'a1b2c3d','dirty':False,'ahead':0,'behind':0,'last':'feat: deterministic failover'},
             {'name':'flop-conformance-lab','git':True,'branch':'main','head':'d4e5f6a','dirty':False,'ahead':0,'behind':0,'last':'test: portable evidence profile'},
