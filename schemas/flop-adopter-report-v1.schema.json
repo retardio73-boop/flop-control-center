@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "flop-adopter-report-v1",
+  "title": "FLOP adopter report v1",
+  "type": "object",
+  "required": ["schema", "project", "platform", "mode", "classification", "evidence"],
+  "properties": {
+    "schema": {"const": "flop.adopter-report.v1"},
+    "project": {"type": "string", "minLength": 1},
+    "repository": {"type": ["string", "null"]},
+    "platform": {"type": "string", "minLength": 1},
+    "mode": {"enum": ["demo", "public-safe-local", "embedded-integrated"]},
+    "classification": {"enum": ["SELF_TEST", "EXTERNAL_REPORTED", "EXTERNAL_VERIFIED"]},
+    "control_center_ref": {"type": ["string", "null"]},
+    "evidence": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "notes": {"type": ["string", "null"]}
+  },
+  "additionalProperties": false
+}

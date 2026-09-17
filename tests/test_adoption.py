@@ -1,0 +1,34 @@
+from core.adoption import validate_report
+
+
+def valid_report(classification="EXTERNAL_REPORTED"):
+    return {
+        "schema": "flop.adopter-report.v1",
+        "project": "example/project",
+        "repository": "https://github.com/example/project",
+        "platform": "Ubuntu 24.04",
+        "mode": "public-safe-local",
+        "classification": classification,
+        "control_center_ref": "main",
+        "evidence": ["https://github.com/example/project/actions/runs/1"],
+        "notes": None,
+    }
+
+
+def test_valid_external_report():
+    assert validate_report(valid_report()) == []
+
+
+def test_self_test_is_explicit_not_external_verified():
+    report = valid_report("SELF_TEST")
+    assert validate_report(report) == []
+    assert report["classification"] != "EXTERNAL_VERIFIED"
+
+
+def test_report_requires_evidence_and_known_schema():
+    report = valid_report()
+    report["evidence"] = []
+    report["schema"] = "unknown"
+    errors = validate_report(report)
+    assert "invalid_evidence" in errors
+    assert "invalid_schema" in errors
