@@ -13,6 +13,7 @@ from core.continuity import build_continuity_evidence, peer_acknowledgements
 from core.continuity_journal import read_records, analyze
 from core.evidence_api import make_record
 from core.evidence_registry import build_registry
+from core.drift_handoff import read_handoff
 from adapters.peer_evidence import collect as collect_peer_evidence
 
 
@@ -71,6 +72,11 @@ def build(cfg):
     if peer_cfg.get('enabled'):
         peer_result = collect_peer_evidence(peer_cfg.get('sources'))
     evidence_registry = build_registry(local_evidence + peer_result.get('records', []))
+    handoff_cfg = cfg.get('drift_handoff', {})
+    handoff_path = handoff_cfg.get('path')
+    if handoff_path and not Path(handoff_path).is_absolute():
+        handoff_path = str(root / handoff_path)
+    drift_handoff = read_handoff(handoff_path)
 
     trust = public_trust_boundaries()
     bad = sum(1 for item in alerts if item['level'] == 'bad')
@@ -89,6 +95,7 @@ def build(cfg):
         'autonomy_evidence': build_continuity_evidence(data),
         'continuity_proof': continuity_metrics,
         'evidence_registry': evidence_registry,
+        'drift_handoff': drift_handoff,
         'peer_evidence': peer_result,
         'peer_acknowledgements': peer_acknowledgements(),
         'alerts': alerts,
