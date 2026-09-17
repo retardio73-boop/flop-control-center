@@ -12,5 +12,9 @@
   },
   "logs": {
     "roots": []
+  },
+  "continuity": {
+    "journal": "runtime/continuity.jsonl",
+    "expected_interval_seconds": 900
   }
 }

@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 from adapters.git import status as git_status
 from adapters.tasks import status as task_status
 from adapters.github import summarize as github_summary
@@ -9,6 +10,7 @@ from core.jobs import snapshot as jobs_snapshot
 from core.trust_boundaries import public_trust_boundaries
 from core.operator_cockpit import build_operator_cockpit
 from core.continuity import build_continuity_evidence, peer_acknowledgements
+from core.continuity_journal import read_records, analyze
 
 
 def build(cfg):
@@ -42,6 +44,15 @@ def build(cfg):
         if not state.get('ok'):
             alerts.append({'level': 'warn', 'text': f'{name} connectivity failed'})
 
+    continuity_cfg = cfg.get('continuity', {})
+    journal = continuity_cfg.get('journal')
+    if journal and not Path(journal).is_absolute():
+        journal = str(root / journal)
+    continuity_metrics = analyze(
+        read_records(journal),
+        expected_interval_seconds=int(continuity_cfg.get('expected_interval_seconds', 900)),
+    )
+
     trust = public_trust_boundaries()
     bad = sum(1 for item in alerts if item['level'] == 'bad')
     warn = sum(1 for item in alerts if item['level'] == 'warn')
@@ -57,6 +68,7 @@ def build(cfg):
         'trust_boundaries': trust,
         'evidence_cockpit': build_operator_cockpit(data, trust),
         'autonomy_evidence': build_continuity_evidence(data),
+        'continuity_proof': continuity_metrics,
         'peer_acknowledgements': peer_acknowledgements(),
         'alerts': alerts,
         'health_score': max(0, 100 - 20 * bad - 7 * warn),

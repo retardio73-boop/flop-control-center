@@ -23,7 +23,7 @@ Open `http://127.0.0.1:8765/`. Demo mode uses synthetic data, loads no local con
 
 1. Copy `config/config.example.json` to `config/config.local.json`.
 2. Or start from `config/presets/flop-stack.example.json` for a FLOP-oriented stack.
-3. Set only your own stack root, repositories, optional targets, logs, and task allowlists.
+3. Set only your own stack root, repositories, optional targets, logs, task allowlists, and optional continuity journal.
 4. Run `python server_public.py`.
 5. Open `http://127.0.0.1:8765/`.
 
@@ -52,11 +52,31 @@ Alpha. The focus is local operational visibility and reversible controls, not re
 
 Control Center is the operator surface; Conformance Lab is the evidence surface; Session Router is the routing surface.
 
-## License
-
-Apache-2.0.
-
-
 ## Public autonomy evidence
 
 `GET /api/status` includes a bounded `flop.autonomy-evidence.v1` section. It reports what this instance can actually observe (configured runtime tasks, network targets, and repository state) and explicitly does **not** claim uninterrupted uptime. Design influences and attribution are documented in [`docs/PEER_LEARNINGS.md`](docs/PEER_LEARNINGS.md).
+
+## Durable continuity proof
+
+An optional append-only JSONL journal turns isolated observations into a bounded `flop.continuity-proof.v1` summary: delivered vs expected cycles, duty cycle, worst observed gap, freshness, and boot-id changes. The dashboard only reads this journal; refreshing the UI never creates a continuity record.
+
+Configure:
+
+```json
+"continuity": {
+  "journal": "runtime/continuity.jsonl",
+  "expected_interval_seconds": 900
+}
+```
+
+Record exactly one cycle from your scheduler/supervisor:
+
+```bash
+python tools/record_continuity.py --boot-id runtime-boot-123
+```
+
+A missing journal remains `unknown`; stale or sparse evidence is reported as such. Duty cycle is evidence delivery against a configured cadence, not a claim of perfect uptime.
+
+## License
+
+Apache-2.0.
