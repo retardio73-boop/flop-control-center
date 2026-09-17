@@ -31,6 +31,9 @@ class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path.startswith('/api/status'):
             return self.send_json(demo_snapshot() if DEMO else build(CFG))
+        if self.path.startswith('/api/evidence'):
+            snap = demo_snapshot() if DEMO else build(CFG)
+            return self.send_json(snap.get('evidence_registry', {'schema':'flop.evidence-registry.v1','records':[],'rejected':[]}))
         return super().do_GET()
 
     def do_POST(self):

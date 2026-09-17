@@ -1,5 +1,7 @@
 from core.trust_boundaries import public_trust_boundaries
 from core.continuity import build_continuity_evidence, peer_acknowledgements
+from core.evidence_api import make_record
+from core.evidence_registry import build_registry
 
 
 def snapshot():
@@ -33,6 +35,7 @@ def snapshot():
             'window_ended_at': '2026-09-17T00:00:00+00:00',
             'claim': 'Demo continuity values are synthetic. Production values come only from durable observation timestamps.',
         },
+        'evidence_registry': build_registry([make_record(source='demo-peer', source_class='community', claim_type='activity', observed_at='2026-09-17T00:00:00+00:00', freshness={'state':'fresh','age_seconds':120}, evidence={'ref':'demo'}, verification_state='observed', authority={'official':False,'normative':False,'grants_action_authority':False}, summary='Synthetic community evidence for demo mode')]),
         'peer_acknowledgements': peer_acknowledgements(),
         'demo': True,
     }
