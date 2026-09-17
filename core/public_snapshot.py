@@ -13,6 +13,7 @@ from core.continuity import build_continuity_evidence, peer_acknowledgements
 from core.continuity_journal import read_records, analyze
 from core.evidence_api import make_record
 from core.evidence_registry import build_registry
+from adapters.peer_evidence import collect as collect_peer_evidence
 
 
 def build(cfg):
@@ -65,7 +66,11 @@ def build(cfg):
             verification_state='observed',
             authority={'official': False, 'normative': False, 'grants_action_authority': False},
             summary='locally measured continuity evidence'))
-    evidence_registry = build_registry(local_evidence)
+    peer_cfg = cfg.get('peer_evidence', {})
+    peer_result = {'records': [], 'errors': [], 'claim': 'Peer evidence disabled.'}
+    if peer_cfg.get('enabled'):
+        peer_result = collect_peer_evidence(peer_cfg.get('sources'))
+    evidence_registry = build_registry(local_evidence + peer_result.get('records', []))
 
     trust = public_trust_boundaries()
     bad = sum(1 for item in alerts if item['level'] == 'bad')
@@ -84,6 +89,7 @@ def build(cfg):
         'autonomy_evidence': build_continuity_evidence(data),
         'continuity_proof': continuity_metrics,
         'evidence_registry': evidence_registry,
+        'peer_evidence': peer_result,
         'peer_acknowledgements': peer_acknowledgements(),
         'alerts': alerts,
         'health_score': max(0, 100 - 20 * bad - 7 * warn),
