@@ -5,7 +5,7 @@ from adapters.tasks import status as task_status
 from adapters.github import summarize as github_summary
 from modules.network import collect as network_collect
 from modules.logs import collect as logs_collect
-from core.config import root_path
+from core.config import load_config, root_path
 from core.jobs import snapshot as jobs_snapshot
 from core.trust_boundaries import public_trust_boundaries
 from core.operator_cockpit import build_operator_cockpit
@@ -14,6 +14,7 @@ from core.continuity_journal import read_records, analyze
 from core.evidence_api import make_record
 from core.evidence_registry import build_registry
 from core.drift_handoff import read_handoff
+from core.adoption import adoption_entrypoint
 from adapters.peer_evidence import collect as collect_peer_evidence
 
 
@@ -84,6 +85,7 @@ def build(cfg):
     return {
         'product': 'FLOP Control Center',
         'mode': 'public-safe',
+        'adoption': adoption_entrypoint(),
         'repos': data['repos'],
         'tasks': data['tasks'],
         'github': data['github'],
