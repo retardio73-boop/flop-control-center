@@ -1,4 +1,5 @@
 from core.trust_boundaries import public_trust_boundaries
+from core.continuity import build_continuity_evidence, peer_acknowledgements
 
 
 def snapshot():
@@ -18,5 +19,7 @@ def snapshot():
         'logs': [{'path':'runtime/agent.log','tail':'INFO observer active\nINFO cursor restored\nINFO no pending work'}],
         'jobs': {'flop-conformance-lab-demo': {'repo':'flop-conformance-lab','state':'passed','code':0,'output':'19 checks passed'}},
         'trust_boundaries': public_trust_boundaries(),
+        'autonomy_evidence': build_continuity_evidence({'tasks':[{'TaskName':'ExampleAgent','State':'Running'}],'network':{'technocore':{'ok':True},'github':{'ok':True}},'repos':[{'name':'flop-session-router','dirty':False,'behind':0},{'name':'flop-conformance-lab','dirty':False,'behind':0}]}),
+        'peer_acknowledgements': peer_acknowledgements(),
         'demo': True,
     }

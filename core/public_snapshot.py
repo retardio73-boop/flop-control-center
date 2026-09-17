@@ -8,6 +8,7 @@ from core.config import root_path
 from core.jobs import snapshot as jobs_snapshot
 from core.trust_boundaries import public_trust_boundaries
 from core.operator_cockpit import build_operator_cockpit
+from core.continuity import build_continuity_evidence, peer_acknowledgements
 
 
 def build(cfg):
@@ -55,6 +56,8 @@ def build(cfg):
         'jobs': jobs_snapshot(),
         'trust_boundaries': trust,
         'evidence_cockpit': build_operator_cockpit(data, trust),
+        'autonomy_evidence': build_continuity_evidence(data),
+        'peer_acknowledgements': peer_acknowledgements(),
         'alerts': alerts,
         'health_score': max(0, 100 - 20 * bad - 7 * warn),
     }
