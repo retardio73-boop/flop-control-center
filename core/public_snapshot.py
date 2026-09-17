@@ -11,6 +11,8 @@ from core.trust_boundaries import public_trust_boundaries
 from core.operator_cockpit import build_operator_cockpit
 from core.continuity import build_continuity_evidence, peer_acknowledgements
 from core.continuity_journal import read_records, analyze
+from core.evidence_api import make_record
+from core.evidence_registry import build_registry
 
 
 def build(cfg):
@@ -53,6 +55,18 @@ def build(cfg):
         expected_interval_seconds=int(continuity_cfg.get('expected_interval_seconds', 900)),
     )
 
+    local_evidence = []
+    if continuity_metrics.get('state') != 'unknown':
+        local_evidence.append(make_record(
+            source='flop-control-center', source_class='local', claim_type='continuity',
+            observed_at=continuity_metrics.get('last_observed_at'),
+            freshness={'state': continuity_metrics.get('freshness_state'), 'age_seconds': continuity_metrics.get('freshness_seconds')},
+            evidence={'schema': continuity_metrics.get('schema'), 'delivered_cycles': continuity_metrics.get('delivered_cycles'), 'expected_cycles': continuity_metrics.get('expected_cycles'), 'duty_cycle': continuity_metrics.get('duty_cycle'), 'worst_gap_seconds': continuity_metrics.get('worst_gap_seconds')},
+            verification_state='observed',
+            authority={'official': False, 'normative': False, 'grants_action_authority': False},
+            summary='locally measured continuity evidence'))
+    evidence_registry = build_registry(local_evidence)
+
     trust = public_trust_boundaries()
     bad = sum(1 for item in alerts if item['level'] == 'bad')
     warn = sum(1 for item in alerts if item['level'] == 'warn')
@@ -69,6 +83,7 @@ def build(cfg):
         'evidence_cockpit': build_operator_cockpit(data, trust),
         'autonomy_evidence': build_continuity_evidence(data),
         'continuity_proof': continuity_metrics,
+        'evidence_registry': evidence_registry,
         'peer_acknowledgements': peer_acknowledgements(),
         'alerts': alerts,
         'health_score': max(0, 100 - 20 * bad - 7 * warn),
