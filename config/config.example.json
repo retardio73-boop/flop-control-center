@@ -16,5 +16,9 @@
   "continuity": {
     "journal": "runtime/continuity.jsonl",
     "expected_interval_seconds": 900
+  },
+  "peer_evidence": {
+    "enabled": false,
+    "sources": ["evidence_scout", "agent_intelligence"]
   }
 }
